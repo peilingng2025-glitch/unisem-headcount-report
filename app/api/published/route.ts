@@ -1,4 +1,4 @@
-import { list, download } from "@vercel/blob";
+import { list, getDownloadUrl } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -6,7 +6,8 @@ export async function GET() {
     const { blobs } = await list({ prefix: "published-report.json" });
     if (!blobs.length) return NextResponse.json(null, { status: 404 });
 
-    const resp = await download(blobs[0].url);
+    const signedUrl = await getDownloadUrl(blobs[0].url);
+    const resp = await fetch(signedUrl, { cache: "no-store" });
     const payload = await resp.json();
     return NextResponse.json(payload);
   } catch {
