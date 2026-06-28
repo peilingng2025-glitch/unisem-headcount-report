@@ -136,6 +136,23 @@ export function buildReport(params: {
     transferCounts[mv.site][mv.position] = (transferCounts[mv.site][mv.position] ?? 0) + 1;
   }
 
+  // Count new joiners per site/position when file is provided
+  const newJoinerCounts: Record<Site, Record<Position, number>> = {
+    Corporate: {} as Record<Position, number>,
+    UGP: {} as Record<Position, number>,
+    USP: {} as Record<Position, number>,
+    UAT: {} as Record<Position, number>,
+  };
+  for (const pos of POSITIONS) {
+    for (const site of SITES) newJoinerCounts[site][pos] = 0;
+  }
+  if (newJoiners) {
+    for (const emp of newJoiners) {
+      const pos = levelToPositionRefined(emp.joblevel, emp.jobgrade, emp.jobtitle, emp.citizenship);
+      newJoinerCounts[emp.site][pos]++;
+    }
+  }
+
   // Build per-site reports
   for (const site of SITES) {
     const sr = siteMap[site];
@@ -147,8 +164,10 @@ export function buildReport(params: {
       const currentTotal = currentCounts[site][pos];
       const resigned = rc.byPosition[pos];
       const transfer = transferCounts[site][pos] ?? 0;
-      // add = net new joiners (current - prev + resigned - net transfers)
-      const add = Math.max(0, currentTotal - prevTotal + resigned - transfer);
+      // When new joiner file is uploaded, use actual count; otherwise fall back to headcount diff formula
+      const add = newJoiners
+        ? newJoinerCounts[site][pos]
+        : Math.max(0, currentTotal - prevTotal + resigned - transfer);
       return {
         position: pos,
         prevTotal,

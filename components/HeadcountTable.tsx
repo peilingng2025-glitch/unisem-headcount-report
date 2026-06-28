@@ -27,7 +27,7 @@ export function HeadcountTable({ report, prevWeekLabel, currentWeekLabel, prevDa
             <th className="text-center px-4 py-3.5 font-bold text-sm">
               Total<br /><span className="font-medium text-blue-200 text-xs">{prevDate} ({prevWeekLabel})</span>
             </th>
-            <th className="text-center px-4 py-3.5 font-bold text-sm">Add</th>
+            <th className="text-center px-4 py-3.5 font-bold text-sm">New Joiner</th>
             <th className="text-center px-4 py-3.5 font-bold text-sm">Resigned /<br />End Contract</th>
             <th className="text-center px-4 py-3.5 font-bold text-sm">Transfer / Cert /<br />Promo / Others</th>
             <th className="text-center px-4 py-3.5 font-bold text-sm" style={{ background: BRAND }}>
