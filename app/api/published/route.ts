@@ -10,7 +10,7 @@ export async function GET() {
     const resp = await fetch(signedUrl, { cache: "no-store" });
     const payload = await resp.json();
     return NextResponse.json(payload);
-  } catch {
-    return NextResponse.json(null, { status: 500 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
