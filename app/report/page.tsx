@@ -96,7 +96,7 @@ export default function ReportPage() {
   }
 
   const overallNet = report.overall.activeTotal - report.overall.positions.reduce((s, p) => s + p.prevTotal, 0);
-  const totalJoiners = report.overall.positions.reduce((s, p) => s + p.add, 0);
+  const totalJoiners = report.joiners.length;
   const totalLeavers = report.overall.positions.reduce((s, p) => s + p.resigned, 0);
 
   return (

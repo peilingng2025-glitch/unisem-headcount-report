@@ -46,11 +46,12 @@ export function buildReport(params: {
   prevTotals: Record<Site, Record<Position, number>>;
   prevEmployees?: PrevEmployeeSnapshot[];
   prevResign?: PrevResignSnapshot[];
+  newJoiners?: (ActiveEmployee & { site: Site })[];
   reportDate: Date;
   weekLabel: string;
   prevWeekLabel: string;
 }): HeadcountReport {
-  const { activeEmployees, resignEmployees, prevTotals, prevEmployees, prevResign, reportDate, weekLabel, prevWeekLabel } = params;
+  const { activeEmployees, resignEmployees, prevTotals, prevEmployees, prevResign, newJoiners, reportDate, weekLabel, prevWeekLabel } = params;
 
   const siteMap: Record<Site, SiteReport> = {
     Corporate: emptySiteReport("Corporate"),
@@ -70,22 +71,20 @@ export function buildReport(params: {
     for (const site of SITES) currentCounts[site][pos] = 0;
   }
 
-  // Track joiners (joined this week)
-  const weekStart = new Date(reportDate);
-  weekStart.setDate(weekStart.getDate() - 6); // 7-day window
-
-  const joiners: ActiveEmployee[] = [];
-
   for (const emp of activeEmployees) {
     const pos = levelToPositionRefined(emp.joblevel, emp.jobgrade, emp.jobtitle, emp.citizenship);
     currentCounts[emp.site][pos]++;
-
-    // Joiner = datejoin within this week
-    const joined = parseFlexDate(emp.datejoin);
-    if (joined && joined >= weekStart && joined <= reportDate) {
-      joiners.push(emp);
-    }
   }
+
+  // Joiners: use uploaded new joiner file if provided, otherwise fall back to datejoin detection
+  const weekStart = new Date(reportDate);
+  weekStart.setDate(weekStart.getDate() - 6);
+  const joiners: (ActiveEmployee & { site: Site })[] = newJoiners
+    ? [...newJoiners]
+    : activeEmployees.filter((emp) => {
+        const joined = parseFlexDate(emp.datejoin);
+        return joined && joined >= weekStart && joined <= reportDate;
+      });
 
   // Count resign statuses per site
   const resignCounts: Record<Site, { bCurrent: number; bFollowing: number; cStatus: number; byPosition: Record<Position, number> }> = {
@@ -192,7 +191,7 @@ export function buildReport(params: {
     sites: SITES.map((s) => siteMap[s]),
     overall: overallSr,
     leavers: resignEmployees,
-    joiners: joiners as (ActiveEmployee & { site: Site })[],
+    joiners,
     movements,
   };
 }

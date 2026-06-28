@@ -2,7 +2,7 @@
 import { useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, FileSpreadsheet, ChevronRight, Info, ArrowLeft } from "lucide-react";
-import { parseActiveFile, parseResignFile, parsePrevHCReport } from "@/lib/parse";
+import { parseActiveFile, parseNewJoinFile, parseResignFile, parsePrevHCReport } from "@/lib/parse";
 import { buildReport } from "@/lib/report";
 import type { Site, Position, PrevEmployeeSnapshot, PrevResignSnapshot } from "@/lib/types";
 
@@ -20,6 +20,8 @@ const INITIAL_SLOTS: UploadSlot[] = [
   { id: "resign-usp", label: "USP Resign Listing", hint: "USP Resign WW##.xlsx", required: true, file: null },
   { id: "resign-ugp", label: "UGP Resign Listing", hint: "UGP Resign WW##.xlsx", required: true, file: null },
   { id: "resign-uat", label: "UAT Resign Listing", hint: "UAT Resign WW##.xlsx", required: false, file: null },
+  { id: "new-join-um", label: "UM New Joiners This Week (optional)", hint: "UM New Join_WW##.xlsx — Corp + UGP + USP new joiners", required: false, file: null },
+  { id: "new-join-uat", label: "UAT New Joiners This Week (optional)", hint: "UAT New Join_WW##.xlsx — UAT new joiners", required: false, file: null },
   { id: "prev-report", label: "Previous Week HC Report (optional)", hint: "HC Report 2026WW##.xlsx — for WoW comparison", required: false, file: null },
   { id: "prev-active", label: "Previous Week Active List (optional)", hint: "Active_WW##.xlsx — enables transfer & movement detection", required: false, file: null },
 ];
@@ -76,20 +78,27 @@ export default function GeneratePage() {
       const resignUsp = get("resign-usp")!;
       const resignUgp = get("resign-ugp")!;
       const resignUat = get("resign-uat");
+      const newJoinUm = get("new-join-um");
+      const newJoinUat = get("new-join-uat");
       const prevReport = get("prev-report");
       const prevActive = get("prev-active");
 
-      const [mainEmps, uatEmps, uspResign, ugpResign, uatResign, prevActiveEmps] = await Promise.all([
+      const [mainEmps, uatEmps, uspResign, ugpResign, uatResign, newJoinUmEmps, newJoinUatEmps, prevActiveEmps] = await Promise.all([
         parseActiveFile(activeMain),
         parseActiveFile(activeUat, "UAT"),
         parseResignFile(resignUsp, "USP"),
         parseResignFile(resignUgp, "UGP"),
         resignUat ? parseResignFile(resignUat, "UAT") : Promise.resolve([]),
+        newJoinUm ? parseNewJoinFile(newJoinUm) : Promise.resolve(null),
+        newJoinUat ? parseNewJoinFile(newJoinUat, "UAT") : Promise.resolve(null),
         prevActive ? parseActiveFile(prevActive) : Promise.resolve(null),
       ]);
 
       const allActive = [...mainEmps, ...uatEmps];
       const allResign = [...uspResign, ...ugpResign, ...uatResign];
+      const allNewJoiners = (newJoinUmEmps || newJoinUatEmps)
+        ? [...(newJoinUmEmps ?? []), ...(newJoinUatEmps ?? [])]
+        : undefined;
 
       let prevTotals: Record<Site, Record<Position, number>> = {
         Corporate: {} as Record<Position, number>,
@@ -142,6 +151,7 @@ export default function GeneratePage() {
         prevTotals,
         prevEmployees,
         prevResign,
+        newJoiners: allNewJoiners,
         reportDate: date,
         weekLabel: wwInput,
         prevWeekLabel: prevWW,

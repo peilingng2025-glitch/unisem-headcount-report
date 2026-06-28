@@ -55,6 +55,30 @@ export async function parseActiveFile(file: File, defaultSite?: Site): Promise<(
     });
 }
 
+// Parse new joiner file (same columns as active, but NO trainee/lwd filter — all new joiners start in training)
+export async function parseNewJoinFile(file: File, defaultSite?: Site): Promise<(ActiveEmployee & { site: Site })[]> {
+  const rows = await readSheet(file);
+  return rows
+    .map((r) => {
+      const site = defaultSite ?? divisionToSite(r["Division"] ?? r["division"] ?? "") ?? "USP";
+      return {
+        badge: String(r["Badge"] ?? r["badge"] ?? ""),
+        name: String(r["Name"] ?? r["name"] ?? ""),
+        division: String(r["Division"] ?? r["division"] ?? ""),
+        department: String(r["Department"] ?? r["department"] ?? ""),
+        section: String(r["Section"] ?? r["section"] ?? ""),
+        jobtitle: String(r["Jobtitle"] ?? r["jobtitle"] ?? r["Job Title"] ?? ""),
+        joblevel: String(r["Joblevel"] ?? r["joblevel"] ?? r["Job Level"] ?? "") as ActiveEmployee["joblevel"],
+        jobgrade: String(r["Jobgrade"] ?? r["jobgrade"] ?? r["Job Grade"] ?? ""),
+        citizenship: String(r["Citizenship"] ?? r["citizenship"] ?? "MALAYSIAN"),
+        datejoin: String(r["Datejoin"] ?? r["datejoin"] ?? r["Date Join"] ?? ""),
+        lastWorkingDate: r["LastWorkingDate"] ?? r["lastWorkingDate"] ?? null,
+        site,
+      };
+    })
+    .filter((e) => e.badge);
+}
+
 // Parse resign file for a given site
 export async function parseResignFile(file: File, site: Site): Promise<ResignEmployee[]> {
   const rows = await readSheet(file);
