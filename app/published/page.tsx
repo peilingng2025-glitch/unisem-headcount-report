@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, TrendingDown, TrendingUp, Users, Building2, Download, AlertCircle, Clock } from "lucide-react";
+import { ArrowLeft, TrendingDown, TrendingUp, Users, Building2, Download, Clock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HeadcountTable } from "@/components/HeadcountTable";
 import { MovementTable } from "@/components/MovementTable";
@@ -42,12 +42,11 @@ export default function PublishedPage() {
   const router = useRouter();
   const [report, setReport] = useState<HeadcountReport | null>(null);
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
-  const [status, setStatus] = useState<"loading" | "found" | "not-found" | "no-storage">("loading");
+  const [status, setStatus] = useState<"loading" | "found" | "not-found">("loading");
 
   useEffect(() => {
     fetch("/api/published")
       .then(async (res) => {
-        if (res.status === 503) { setStatus("no-storage"); return; }
         if (!res.ok) { setStatus("not-found"); return; }
         const data = await res.json();
         if (!data) { setStatus("not-found"); return; }
@@ -127,20 +126,7 @@ export default function PublishedPage() {
           </div>
         )}
 
-        {status === "no-storage" && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 flex gap-3">
-            <AlertCircle size={20} className="text-amber-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-amber-900">Publish storage not configured</p>
-              <p className="text-sm text-amber-800 mt-1">
-                To enable publishing, set up a <strong>Vercel Blob</strong> store in your Vercel project dashboard
-                (Storage → Create store → Link to project), then add <code className="bg-amber-100 px-1 rounded">BLOB_READ_WRITE_TOKEN</code> to your environment variables.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {status === "not-found" && (
+{status === "not-found" && (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-10 text-center">
             <p className="text-lg font-bold text-gray-700 mb-2">No published report yet</p>
             <p className="text-sm text-gray-600 mb-4">Generate a report and click <strong>Publish</strong> to make it visible here.</p>
