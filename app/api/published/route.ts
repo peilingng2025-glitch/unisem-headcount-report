@@ -1,4 +1,4 @@
-import { list, getDownloadUrl } from "@vercel/blob";
+import { list, get } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -6,9 +6,10 @@ export async function GET() {
     const { blobs } = await list({ prefix: "published-report.json" });
     if (!blobs.length) return NextResponse.json(null, { status: 404 });
 
-    const signedUrl = await getDownloadUrl(blobs[0].url);
-    const resp = await fetch(signedUrl, { cache: "no-store" });
-    const payload = await resp.json();
+    const result = await get(blobs[0].url, { access: "private" });
+    if (!result) return NextResponse.json(null, { status: 404 });
+
+    const payload = await new Response(result.stream).json();
     return NextResponse.json(payload);
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
