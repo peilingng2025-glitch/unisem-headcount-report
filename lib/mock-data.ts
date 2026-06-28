@@ -1,0 +1,152 @@
+import type { HeadcountReport } from "./types";
+
+// Demo data only — all names and badge numbers are fictional.
+// Real employee data must never be committed to source control.
+// Load real data at runtime via the Upload page.
+export const MOCK_REPORT: HeadcountReport = {
+  weekLabel: "WW26",
+  prevWeekLabel: "WW25",
+  reportDate: "26-Jun-26",
+  prevDate: "19-Jun-26",
+
+  sites: [
+    {
+      site: "Corporate",
+      positions: [
+        { position: "Management",        prevTotal: 10, add: 0, resigned: 0, transfer:  0, currentTotal: 10 },
+        { position: "Specialist Eng",    prevTotal:  0, add: 1, resigned: 0, transfer:  0, currentTotal:  1 },
+        { position: "Section Head",      prevTotal:  0, add: 4, resigned: 0, transfer:  0, currentTotal:  4 },
+        { position: "Engineer",          prevTotal:  2, add: 2, resigned: 0, transfer:  0, currentTotal:  4 },
+        { position: "Other Exec",        prevTotal:  6, add: 0, resigned: 0, transfer:  0, currentTotal:  0 },
+        { position: "Supervisor",        prevTotal:  0, add: 0, resigned: 0, transfer:  0, currentTotal:  0 },
+        { position: "Technician",        prevTotal:  1, add: 4, resigned: 0, transfer:  0, currentTotal:  5 },
+        { position: "Other Non-Exec",    prevTotal:  4, add: 0, resigned: 0, transfer:  0, currentTotal:  0 },
+        { position: "Operator (Local)",  prevTotal:  0, add: 0, resigned: 0, transfer:  0, currentTotal:  0 },
+        { position: "Operator (Foreign)",prevTotal:  0, add: 0, resigned: 0, transfer:  0, currentTotal:  0 },
+      ],
+      bStatusCurrent: 0, bStatusFollowing: 0, cStatus: 0,
+      activeTotal: 24, payrollTotal: 24,
+    },
+    {
+      site: "UGP",
+      positions: [
+        { position: "Management",        prevTotal:  43, add:  1, resigned: 1, transfer:  0, currentTotal:  43 },
+        { position: "Specialist Eng",    prevTotal:   0, add:  1, resigned: 0, transfer:  0, currentTotal:   1 },
+        { position: "Section Head",      prevTotal:  24, add: 30, resigned: 0, transfer:  0, currentTotal:  54 },
+        { position: "Engineer",          prevTotal: 117, add: 43, resigned: 0, transfer:  0, currentTotal: 160 },
+        { position: "Other Exec",        prevTotal:  65, add:  0, resigned: 4, transfer:  0, currentTotal:   0 },
+        { position: "Supervisor",        prevTotal:  58, add:  0, resigned: 0, transfer:  0, currentTotal:  56 },
+        { position: "Technician",        prevTotal: 278, add: 55, resigned: 0, transfer:  0, currentTotal: 333 },
+        { position: "Other Non-Exec",    prevTotal:  53, add:  0, resigned: 2, transfer:  0, currentTotal:  26 },
+        { position: "Operator (Local)",  prevTotal: 220, add:  3, resigned: 0, transfer:  0, currentTotal: 223 },
+        { position: "Operator (Foreign)",prevTotal: 368, add:  4, resigned: 2, transfer:  0, currentTotal: 370 },
+      ],
+      bStatusCurrent: 1, bStatusFollowing: 8, cStatus: 0,
+      activeTotal: 1266, payrollTotal: 1275,
+    },
+    {
+      site: "USP",
+      positions: [
+        { position: "Management",        prevTotal:  34, add:  0, resigned:  0, transfer:  0, currentTotal:  34 },
+        { position: "Specialist Eng",    prevTotal:   4, add:  0, resigned:  0, transfer:  0, currentTotal:   4 },
+        { position: "Section Head",      prevTotal:  25, add: 22, resigned:  0, transfer:  0, currentTotal:  47 },
+        { position: "Engineer",          prevTotal: 120, add: 42, resigned:  0, transfer: +2, currentTotal: 164 },
+        { position: "Other Exec",        prevTotal:  59, add:  0, resigned:  0, transfer:  0, currentTotal:   0 },
+        { position: "Supervisor",        prevTotal: 127, add:  1, resigned:  0, transfer:  0, currentTotal: 128 },
+        { position: "Technician",        prevTotal: 465, add:109, resigned:  0, transfer: -2, currentTotal: 572 },
+        { position: "Other Non-Exec",    prevTotal: 109, add:  0, resigned:  3, transfer:  0, currentTotal:  35 },
+        { position: "Operator (Local)",  prevTotal: 646, add: 14, resigned:  0, transfer:  0, currentTotal: 660 },
+        { position: "Operator (Foreign)",prevTotal: 604, add: 12, resigned:  2, transfer:  0, currentTotal: 614 },
+      ],
+      bStatusCurrent: 1, bStatusFollowing: 2, cStatus: 2,
+      activeTotal: 2258, payrollTotal: 2263,
+    },
+    {
+      site: "UAT",
+      positions: [
+        { position: "Management",        prevTotal:  8, add: 0, resigned: 0, transfer: 0, currentTotal:  7 },
+        { position: "Specialist Eng",    prevTotal:  0, add: 0, resigned: 0, transfer: 0, currentTotal:  0 },
+        { position: "Section Head",      prevTotal:  4, add: 1, resigned: 0, transfer: 0, currentTotal:  5 },
+        { position: "Engineer",          prevTotal: 52, add: 0, resigned: 0, transfer: 0, currentTotal: 51 },
+        { position: "Other Exec",        prevTotal:  0, add: 0, resigned: 0, transfer: 0, currentTotal:  0 },
+        { position: "Supervisor",        prevTotal:  8, add: 0, resigned: 0, transfer: 0, currentTotal:  8 },
+        { position: "Technician",        prevTotal:128, add: 0, resigned: 0, transfer: 0, currentTotal:126 },
+        { position: "Other Non-Exec",    prevTotal:  2, add: 1, resigned: 1, transfer: 0, currentTotal:  2 },
+        { position: "Operator (Local)",  prevTotal: 56, add: 1, resigned: 0, transfer: 0, currentTotal: 57 },
+        { position: "Operator (Foreign)",prevTotal: 42, add: 0, resigned: 0, transfer: 0, currentTotal: 42 },
+      ],
+      bStatusCurrent: 0, bStatusFollowing: 0, cStatus: 1,
+      activeTotal: 298, payrollTotal: 299,
+    },
+  ],
+
+  overall: {
+    site: "Corporate",
+    positions: [
+      { position: "Management",        prevTotal:  95, add:  1, resigned: 1, transfer:  0, currentTotal:  94 },
+      { position: "Specialist Eng",    prevTotal:   4, add:  2, resigned: 0, transfer:  0, currentTotal:   6 },
+      { position: "Section Head",      prevTotal:  53, add: 57, resigned: 0, transfer:  0, currentTotal: 110 },
+      { position: "Engineer",          prevTotal: 291, add: 87, resigned: 0, transfer: +2, currentTotal: 379 },
+      { position: "Other Exec",        prevTotal: 130, add:  0, resigned: 4, transfer:  0, currentTotal:   0 },
+      { position: "Supervisor",        prevTotal: 193, add:  1, resigned: 0, transfer:  0, currentTotal: 192 },
+      { position: "Technician",        prevTotal: 872, add:168, resigned: 0, transfer: -2, currentTotal:1036 },
+      { position: "Other Non-Exec",    prevTotal: 168, add:  1, resigned: 6, transfer:  0, currentTotal:  63 },
+      { position: "Operator (Local)",  prevTotal: 922, add: 18, resigned: 0, transfer:  0, currentTotal: 940 },
+      { position: "Operator (Foreign)",prevTotal:1014, add: 16, resigned: 4, transfer:  0, currentTotal:1026 },
+    ],
+    bStatusCurrent: 2, bStatusFollowing: 10, cStatus: 3,
+    activeTotal: 3846, payrollTotal: 3861,
+  },
+
+  // Demo leavers — fictional names and badge numbers
+  leavers: [
+    { badge: "O10001", name: "DEMO EMPLOYEE A",    section: "PROD - LEADLESS",         jobtitle: "OPERATOR/QA INSP/G.WORKER", jobLevel: "Operator",      pncDate: "19-Jun-2026", resignDate: "19-Jun-2026", payrollMonth: "Jun-2026", reason: "PERSONAL PROBLEM", site: "USP" },
+    { badge: "O10002", name: "DEMO EMPLOYEE B",    section: "FT - PII",                jobtitle: "OPERATOR/QA INSP/G.WORKER", jobLevel: "Operator",      pncDate: "19-Jun-2026", resignDate: "06-Jun-2026", payrollMonth: "Jun-2026", reason: "ABSENT >3 DAYS",   site: "USP" },
+    { badge: "S10003", name: "DEMO EMPLOYEE C",    section: "PROD - LEADLESS",         jobtitle: "SR. TECHNICIAN",            jobLevel: "Non Executive", pncDate: "23-Jun-2026", resignDate: "05-Jul-2026", payrollMonth: "Jul-2026", reason: "GOT A NEW JOB",    site: "USP" },
+    { badge: "S10004", name: "DEMO EMPLOYEE D",    section: "HR - TRAINING",           jobtitle: "SR. TRAINER",               jobLevel: "Non Executive", pncDate: "23-Jun-2026", resignDate: "23-Jul-2026", payrollMonth: "Jul-2026", reason: "GOT A NEW JOB",    site: "USP" },
+    { badge: "S10005", name: "DEMO EMPLOYEE E",    section: "PROD - LEADLESS",         jobtitle: "SR. TECHNICIAN",            jobLevel: "Non Executive", pncDate: "19-Jun-2026", resignDate: "28-Jun-2026", payrollMonth: "Jun-2026", reason: "FURTHER STUDIES",  site: "USP" },
+    { badge: "O10006", name: "DEMO EMPLOYEE F",    section: "FT - MPS",                jobtitle: "OPERATOR/QA INSP/G.WORKER", jobLevel: "Operator",      pncDate: "22-Jun-2026", resignDate: "20-Jul-2026", payrollMonth: "Jul-2026", reason: "PERSONAL PROBLEM", site: "UGP" },
+    { badge: "O10007", name: "DEMO EMPLOYEE G",    section: "PROD - LEADLESS",         jobtitle: "OPERATOR/QA INSP/G.WORKER", jobLevel: "Operator",      pncDate: "23-Jun-2026", resignDate: "01-Jul-2026", payrollMonth: "Jul-2026", reason: "PERSONAL PROBLEM", site: "UGP" },
+    { badge: "S10008", name: "DEMO EMPLOYEE H",    section: "ENG - LEADLESS",          jobtitle: "TECHNICAL SPECIALIST",      jobLevel: "Non Executive", pncDate: "25-Jun-2026", resignDate: "30-Jun-2026", payrollMonth: "Jun-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "S10009", name: "DEMO EMPLOYEE I",    section: "PROD - LEADLESS",         jobtitle: "TECHNICIAN",                jobLevel: "Non Executive", pncDate: "23-Jun-2026", resignDate: "05-Jul-2026", payrollMonth: "Jul-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "S10010", name: "DEMO EMPLOYEE J",    section: "QRA - ENGINEERING",       jobtitle: "SR. QRA ENGINEER",          jobLevel: "Executive",     pncDate: "25-Jun-2026", resignDate: "06-Aug-2026", payrollMonth: "Aug-2026", reason: "PERSONAL PROBLEM", site: "UGP" },
+    { badge: "S10011", name: "DEMO EMPLOYEE K",    section: "ENG - NPI",               jobtitle: "STAFF PROCESS ENGINEER",    jobLevel: "Executive",     pncDate: "22-Jun-2026", resignDate: "18-Aug-2026", payrollMonth: "Aug-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "S10012", name: "DEMO EMPLOYEE L",    section: "FAC - FACILITY",          jobtitle: "FACILITY ENGINEER",         jobLevel: "Executive",     pncDate: "26-Jun-2026", resignDate: "22-Aug-2026", payrollMonth: "Aug-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "S10013", name: "DEMO EMPLOYEE M",    section: "MAT - PURCHASING",        jobtitle: "SR. PURCHASING EXECUTIVE",  jobLevel: "Executive",     pncDate: "22-Jun-2026", resignDate: "31-Jul-2026", payrollMonth: "Jul-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "S10014", name: "DEMO EMPLOYEE N",    section: "FAC - FACILITY",          jobtitle: "MANAGER - FACILITY",        jobLevel: "Management",    pncDate: "26-Jun-2026", resignDate: "23-Jul-2026", payrollMonth: "Jul-2026", reason: "GOT A NEW JOB",    site: "UGP" },
+    { badge: "US10015",name: "DEMO EMPLOYEE O",    section: "PROD - FAB 1 PLATING",    jobtitle: "MANUFACTURING ASSISTANT",   jobLevel: "Non Executive", pncDate: "23-Jun-2026", resignDate: "04-Jun-2026", payrollMonth: "Jun-2026", reason: "ABSENT >3 DAYS",   site: "UAT" },
+  ],
+
+  // Demo joiners — fictional names and badge numbers
+  joiners: [
+    { badge: "N10101", name: "DEMO JOINER 01", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "INDONESIAN", datejoin: "22-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "N10102", name: "DEMO JOINER 02", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "INDONESIAN", datejoin: "22-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "N10103", name: "DEMO JOINER 03", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "INDONESIAN", datejoin: "22-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "N10104", name: "DEMO JOINER 04", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "INDONESIAN", datejoin: "25-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10105", name: "DEMO JOINER 05", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10106", name: "DEMO JOINER 06", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10107", name: "DEMO JOINER 07", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10108", name: "DEMO JOINER 08", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10109", name: "DEMO JOINER 09", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10110", name: "DEMO JOINER 10", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10111", name: "DEMO JOINER 11", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10112", name: "DEMO JOINER 12", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "O10113", name: "DEMO JOINER 13", division: "10 [SP Factory]", department: "80 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "USP" },
+    { badge: "UO10114",name: "DEMO JOINER 14", division: "10 [Factory]",    department: "42 [HUMAN RESOURCE]", section: "HR - TRAINING & DEVELOPMENT", jobtitle: "OPERATOR/QA INSP/G.WORKER", joblevel: "Operator", jobgrade: "O1", citizenship: "MALAYSIAN",  datejoin: "26-Jun-2026", lastWorkingDate: null, site: "UAT" },
+  ],
+
+  // Demo movements — fictional names and badge numbers
+  movements: [
+    { type: "section-transfer",    badge: "N10201", name: "DEMO OPERATOR 01", site: "USP", position: "Operator (Foreign)", section: "FT - CTRO",              fromSection: "HR - TRAINING & DEVELOPMENT" },
+    { type: "section-transfer",    badge: "N10202", name: "DEMO OPERATOR 02", site: "USP", position: "Operator (Foreign)", section: "PROD - LEADLESS",         fromSection: "HR - TRAINING & DEVELOPMENT" },
+    { type: "section-transfer",    badge: "N10203", name: "DEMO OPERATOR 03", site: "USP", position: "Operator (Foreign)", section: "PROD - METAL FINISHING",   fromSection: "HR - TRAINING & DEVELOPMENT" },
+    { type: "section-transfer",    badge: "O10204", name: "DEMO OPERATOR 04", site: "UGP", position: "Operator (Local)",   section: "FT - MULTICUSTOMER",      fromSection: "FT - MPS" },
+    { type: "section-transfer",    badge: "O10205", name: "DEMO OPERATOR 05", site: "USP", position: "Operator (Local)",   section: "QRA - IPQA - WLCSP",      fromSection: "HR - TRAINING & DEVELOPMENT" },
+    { type: "category-change",     badge: "S10301", name: "DEMO STAFF 01",    site: "USP", position: "Engineer",  fromPosition: "Technician", joblevel: "Executive",     fromJoblevel: "Non Executive" },
+    { type: "category-change",     badge: "S10302", name: "DEMO STAFF 02",    site: "USP", position: "Engineer",  fromPosition: "Technician", joblevel: "Executive",     fromJoblevel: "Non Executive" },
+    { type: "promotion",           badge: "S10303", name: "DEMO STAFF 03",    site: "USP", position: "Supervisor", jobgrade: "S2", fromJobgrade: "S1" },
+    { type: "resignation-pullback",badge: "O10401", name: "DEMO OPERATOR 06", site: "USP", position: "Operator (Local)" },
+    { type: "resignation-pullback",badge: "O10402", name: "DEMO OPERATOR 07", site: "USP", position: "Operator (Local)" },
+    { type: "resignation-pullback",badge: "O10403", name: "DEMO OPERATOR 08", site: "USP", position: "Operator (Local)" },
+  ],
+};
