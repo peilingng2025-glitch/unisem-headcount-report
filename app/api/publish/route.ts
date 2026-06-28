@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     const payload = { publishedAt: new Date().toISOString(), report: body };
 
     const { url } = await put("published-report.json", JSON.stringify(payload), {
-      access: "public",
+      access: "private",
       contentType: "application/json",
       addRandomSuffix: false,
     });
