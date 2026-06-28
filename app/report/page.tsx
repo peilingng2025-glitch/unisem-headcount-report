@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Download, TrendingDown, TrendingUp, Users, Building2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, TrendingDown, TrendingUp, Users, Building2, RefreshCw, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HeadcountTable } from "@/components/HeadcountTable";
 import { MovementTable } from "@/components/MovementTable";
@@ -48,10 +48,14 @@ function StatusPill({ label, value, color, bg, hint }: StatusPillProps) {
   );
 }
 
+type PublishState = "idle" | "publishing" | "done" | "error";
+
 export default function ReportPage() {
   const router = useRouter();
   const [report, setReport] = useState<HeadcountReport | null>(null);
   const [useMock, setUseMock] = useState(false);
+  const [publishState, setPublishState] = useState<PublishState>("idle");
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("hc_report");
@@ -63,6 +67,25 @@ export default function ReportPage() {
       setUseMock(true);
     }
   }, []);
+
+  async function handlePublish() {
+    if (!report || useMock) return;
+    setPublishState("publishing");
+    setPublishError(null);
+    try {
+      const res = await fetch("/api/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(report),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error ?? "Unknown error");
+      setPublishState("done");
+    } catch (err) {
+      setPublishState("error");
+      setPublishError(err instanceof Error ? err.message : String(err));
+    }
+  }
 
   if (!report) {
     return (
@@ -84,7 +107,7 @@ export default function ReportPage() {
         <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/generate")}
               className="flex items-center gap-1.5 text-sm font-semibold text-gray-300 hover:text-white transition-colors"
             >
               <ArrowLeft size={16} /> Upload
@@ -105,7 +128,7 @@ export default function ReportPage() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/generate")}
               className="flex items-center gap-1.5 text-sm font-semibold px-3 py-2 rounded border transition-colors text-gray-300 hover:text-white"
               style={{ borderColor: "#2e3d5e" }}
             >
@@ -125,9 +148,37 @@ export default function ReportPage() {
             >
               <Download size={14} /> PowerPoint
             </button>
+            <button
+              onClick={handlePublish}
+              disabled={useMock || publishState === "publishing"}
+              className="flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: publishState === "done" ? "#1a6b35" : "#1a2e5e" }}
+              title={useMock ? "Cannot publish sample data" : "Publish this report for management to view"}
+            >
+              {publishState === "publishing" ? (
+                <><span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent" /> Publishing…</>
+              ) : publishState === "done" ? (
+                <><CheckCircle size={14} /> Published</>
+              ) : (
+                <><Send size={14} /> Publish</>
+              )}
+            </button>
           </div>
         </div>
       </header>
+
+      {publishState === "error" && (
+        <div className="bg-red-50 border-b border-red-200 px-6 py-3 flex items-center gap-2 text-sm text-red-700 print:hidden">
+          <AlertCircle size={15} />
+          <strong>Publish failed:</strong> {publishError}
+        </div>
+      )}
+      {publishState === "done" && (
+        <div className="bg-green-50 border-b border-green-200 px-6 py-3 flex items-center gap-2 text-sm text-green-700 print:hidden">
+          <CheckCircle size={15} />
+          Report published. Management can now view it at <strong>/published</strong>.
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-6 py-6">
 
@@ -266,7 +317,7 @@ async function handleExportExcel() {
   if (!stored) return;
   const report: HeadcountReport = JSON.parse(stored);
   const { exportToExcel } = await import("@/lib/export-excel");
-  exportToExcel(report);
+  await exportToExcel(report);
 }
 
 async function handleExportPPT() {

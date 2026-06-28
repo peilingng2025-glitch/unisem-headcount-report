@@ -43,3 +43,9 @@ next-env.d.ts
 # Employee data — never commit real HRMS exports or seeded JSON
 /public/data/
 /Reference Documents/
+
+# Branded templates (place manually in public/ for local use; never commit)
+/public/template.pptx
+/public/hc-template.xlsx
+
+.vercel
