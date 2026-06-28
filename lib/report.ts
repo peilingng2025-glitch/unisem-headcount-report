@@ -268,12 +268,8 @@ function detectMovements(
         jobgrade: emp.jobgrade,
         fromJobgrade: p.jobgrade,
       });
-    } else if (
-      emp.joblevel.toLowerCase() === "operator" &&
-      emp.section !== p.section &&
-      emp.section && p.section
-    ) {
-      // Operator section transfer (same site, same grade, section changed)
+    } else if (emp.section !== p.section && emp.section && p.section) {
+      // Section transfer — same site, same grade, section changed (any level)
       movements.push({
         type: "section-transfer",
         badge: emp.badge,

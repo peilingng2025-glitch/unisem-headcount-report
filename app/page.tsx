@@ -23,6 +23,7 @@ const INITIAL_SLOTS: UploadSlot[] = [
   { id: "resign-ugp", label: "UGP Resign Listing", hint: "UGP Resign WW##.xlsx", required: true, file: null },
   { id: "resign-uat", label: "UAT Resign Listing", hint: "UAT Resign WW##.xlsx", required: false, file: null },
   { id: "prev-report", label: "Previous Week HC Report (optional)", hint: "HC Report 2026WW##.xlsx — for WoW comparison", required: false, file: null },
+  { id: "prev-active", label: "Previous Week Active List (optional)", hint: "Active_WW##.xlsx — enables transfer & movement detection", required: false, file: null },
 ];
 
 // Unisem WW calendar: weeks run Sunday → Saturday.
@@ -83,13 +84,15 @@ export default function UploadPage() {
       const resignUgp = get("resign-ugp")!;
       const resignUat = get("resign-uat");
       const prevReport = get("prev-report");
+      const prevActive = get("prev-active");
 
-      const [mainEmps, uatEmps, uspResign, ugpResign, uatResign] = await Promise.all([
+      const [mainEmps, uatEmps, uspResign, ugpResign, uatResign, prevActiveEmps] = await Promise.all([
         parseActiveFile(activeMain),
         parseActiveFile(activeUat, "UAT"),
         parseResignFile(resignUsp, "USP"),
         parseResignFile(resignUgp, "UGP"),
         resignUat ? parseResignFile(resignUat, "UAT") : Promise.resolve([]),
+        prevActive ? parseActiveFile(prevActive) : Promise.resolve(null),
       ]);
 
       const allActive = [...mainEmps, ...uatEmps];
@@ -118,12 +121,27 @@ export default function UploadPage() {
       // Load previous employee snapshot for movement detection
       let prevEmployees: PrevEmployeeSnapshot[] = [];
       let prevResign: PrevResignSnapshot[] = [];
-      try {
-        const pe = localStorage.getItem("hc_prev_employees");
-        const pr = localStorage.getItem("hc_prev_resign");
-        if (pe) prevEmployees = JSON.parse(pe);
-        if (pr) prevResign = JSON.parse(pr);
-      } catch { /* ignore parse errors */ }
+      if (prevActiveEmps) {
+        // File provided — use it directly (overrides localStorage)
+        prevEmployees = prevActiveEmps.map((e) => ({
+          badge: e.badge,
+          name: e.name,
+          site: e.site,
+          section: e.section ?? "",
+          joblevel: e.joblevel,
+          jobgrade: e.jobgrade ?? "",
+          jobtitle: e.jobtitle ?? "",
+          citizenship: e.citizenship ?? "",
+        }));
+        // No prev resign data available from this file — keep empty for first run
+      } else {
+        try {
+          const pe = localStorage.getItem("hc_prev_employees");
+          const pr = localStorage.getItem("hc_prev_resign");
+          if (pe) prevEmployees = JSON.parse(pe);
+          if (pr) prevResign = JSON.parse(pr);
+        } catch { /* ignore parse errors */ }
+      }
 
       const prevWW = `WW${String(parseInt(wwInput.replace("WW", "")) - 1).padStart(2, "0")}`;
       const date = new Date(reportDate);
