@@ -43,7 +43,16 @@ export async function parseActiveFile(file: File, defaultSite?: Site): Promise<(
         site,
       };
     })
-    .filter((e) => e.badge);
+    .filter((e) => {
+      if (!e.badge) return false;
+      // Exclude trainees (HR training section or TRAINEE job title)
+      const section = (e.section ?? "").toUpperCase();
+      const jobtitle = (e.jobtitle ?? "").toUpperCase();
+      if (section.includes("TRAINING") || jobtitle.includes("TRAINEE")) return false;
+      // Exclude employees who have a last working date (they belong in the resign file)
+      if (e.lastWorkingDate && String(e.lastWorkingDate).trim() !== "") return false;
+      return true;
+    });
 }
 
 // Parse resign file for a given site
